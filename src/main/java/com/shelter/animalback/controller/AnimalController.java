@@ -1,64 +1,66 @@
 package com.shelter.animalback.controller;
 
 import com.shelter.animalback.domain.Animal;
+import com.shelter.animalback.exceptions.AnimalNotFoundException;
+import com.shelter.animalback.exceptions.DataConflictException;
+import com.shelter.animalback.service.interfaces.AnimalService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 @RestController
 public class AnimalController {
-    private HashMap<String, Animal> animalsList;
-
-    public AnimalController() {
-        animalsList = new HashMap<String, Animal>() {{
-            put("bigotes", new Animal("Bigotes", "Bengalí", "Male", true, new String[]{"Rabia"}));
-        }};
-    }
+    @Autowired
+    private AnimalService animalService;
 
     @GetMapping("/animals")
     public Collection<Animal> listAnimals() {
-        return animalsList.values();
+        return animalService.getAll();
     }
 
-    @GetMapping("/animal/{name}")
-    public Animal getAnimal(@PathVariable("name") String name) {
-        return animalsList.get(name.toLowerCase());
+    @GetMapping("/animals/{name}")
+    public ResponseEntity getAnimal(@PathVariable("name") String name) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(animalService.get(name));
+        } catch (AnimalNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The animal called %s does not exists", name));
+        }
     }
 
-    @DeleteMapping("/animal/{name}")
-    public void deleteAnimal(@PathVariable("name") String name) {
-        animalsList.remove(name.toLowerCase());
+    @DeleteMapping("/animals/{name}")
+    public ResponseEntity deleteAnimal(@PathVariable("name") String name) {
+        try {
+            animalService.delete(name);
+            return ResponseEntity.noContent().build();
+        } catch (AnimalNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The animal called %s does not exists", name));
+        }
+
     }
 
-    @PostMapping("/animal")
+    @PostMapping("/animals")
     public ResponseEntity saveAnimal(@RequestBody Animal animalDto) {
-        String name = animalDto.getName();
-        if (animalsList.containsKey(name.toLowerCase())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("The animal has already been created");
+        try {
+            var animal = animalService.save(animalDto);
+            return new ResponseEntity<Animal>(animal, HttpStatus.CREATED);
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("The animal called %s has already been created", animalDto.getName()));
         }
-
-        animalsList.put(name.toLowerCase(), new Animal(animalDto.getName(), animalDto.getBreed(), animalDto.getGender(), animalDto.isVaccinated(), animalDto.getVaccines()));
-
-        Animal returnedAnimal = animalsList.get(name.toLowerCase());
-        return new ResponseEntity<Animal>(returnedAnimal, HttpStatus.CREATED);
     }
 
-    @PutMapping("/animal/{name}")
+    @PutMapping("/animals/{name}")
     public ResponseEntity updateAnimal(@PathVariable("name") String name, @RequestBody Animal animalDto) {
-        if (!animalsList.containsKey(name.toLowerCase())) {
+        try {
+            var updatedAnimal = animalService.replace(name, animalDto);
+            return new ResponseEntity<Animal>(updatedAnimal, HttpStatus.OK);
+        } catch (AnimalNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The animal does not exist");
+        } catch (DataConflictException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The name can not be modified");
         }
-        Animal animal = animalsList.get(name.toLowerCase());
-        animal.setBreed(animalDto.getBreed());
-        animal.setVaccinated(animalDto.isVaccinated());
-        animal.setGender(animalDto.getGender());
-        animal.setVaccines(animalDto.getVaccines());
-        animalsList.replace(name.toLowerCase(), animal);
-
-        Animal returnedAnimal = animalsList.get(name.toLowerCase());
-        return new ResponseEntity<Animal>(returnedAnimal, HttpStatus.OK);
     }
 }
