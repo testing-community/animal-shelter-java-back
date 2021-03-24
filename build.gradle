@@ -25,6 +25,11 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.rest-assured:rest-assured:4.2.0'
+	testImplementation 'io.rest-assured:json-path:4.2.0'
+	testImplementation 'io.rest-assured:json-schema-validator:4.2.0'
+	testImplementation 'io.rest-assured:xml-path:4.2.0'
+	testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 test {
