@@ -29,7 +29,7 @@ dependencies {
 	testImplementation 'io.rest-assured:json-path:4.2.0'
 	testImplementation 'io.rest-assured:json-schema-validator:4.2.0'
 	testImplementation 'io.rest-assured:xml-path:4.2.0'
-	testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+	testImplementation 'com.h2database:h2:1.4.200'
 }
 
 test {
