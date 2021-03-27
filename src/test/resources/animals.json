@@ -1,0 +1,28 @@
+{
+  "type": "array",
+  "minItems": 1,
+  "items": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "breed": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "string",
+          "enum": ["Male", "Female"]
+        },
+        "vaccines": {
+          "type": "array"
+        },
+        "vaccinated": {
+          "type": "boolean"
+        }
+      },
+      "required": ["name", "breed", "gender", "vaccines", "vaccinated"]
+    }
+  ]
+}
