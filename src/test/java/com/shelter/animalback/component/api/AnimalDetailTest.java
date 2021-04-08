@@ -34,7 +34,6 @@ public class AnimalDetailTest {
     AnimalRepository animalRepository;
 
     @BeforeEach
-    @SneakyThrows
     public void setUp() {
         var cat = new AnimalDao("Thor", "Birmano", "Male", false);
         animalRepository.save(cat);
