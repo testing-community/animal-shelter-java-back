@@ -59,12 +59,9 @@ public class animalDetailTest {
     }
 
     @Test
-    public void detailWithTheRightAnimal() {
-        Animal animal =
-                RestAssured
-                        .when()
-                        .get("/animals/Thor")
-                        .then().extract().as(Animal.class);
+    public void detailWithTheRightAnimal() throws Exception {
+        var response = mockMvc.perform(get("/animals/Thor")).andReturn().getResponse();
+        var animal = new ObjectMapper().readValue(response.getContentAsString(), Animal.class);
 
         MatcherAssert.assertThat(animal.getName(), Matchers.equalTo(cat.getName()));
         MatcherAssert.assertThat(animal.getBreed(), Matchers.equalTo(cat.getBreed()));
