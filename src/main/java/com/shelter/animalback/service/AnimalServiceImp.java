@@ -90,6 +90,7 @@ public class AnimalServiceImp implements AnimalService {
                 vaccinesDao.stream().map(vaccineDao -> vaccineDao.getName()).toArray(size -> new String[size]);
 
         return new Animal(
+                dao.getId(),
                 dao.getName(),
                 dao.getBreed(),
                 dao.getGender(),
