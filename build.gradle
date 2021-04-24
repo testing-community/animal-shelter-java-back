@@ -26,6 +26,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'com.h2database:h2:1.4.200'
 	testImplementation 'org.everit.json:org.everit.json.schema:1.0.0'
+
+	testCompile 'org.testcontainers:testcontainers:1.15.2'
+	testCompile "org.testcontainers:junit-jupiter:1.15.2"
+	testImplementation 'org.testcontainers:postgresql:1.15.2'
 }
 
 test {

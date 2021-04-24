@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: none
+    username: none
+    password: none

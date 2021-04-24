@@ -17,10 +17,10 @@ import javax.persistence.Column;
 @NoArgsConstructor
 @Entity
 @Table(name = "VACCINE")
-@SequenceGenerator(name="VACCINE_SEQ", initialValue = 1)
 public class VaccineDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "VACCINE_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "VACCINE_GENERATOR")
+    @SequenceGenerator(name="VACCINE_GENERATOR", sequenceName = "VACCINE_SEQ", allocationSize = 1)
     private Long id;
 
     @Column(unique = true)

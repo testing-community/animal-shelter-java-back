@@ -12,13 +12,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "ANIMAL")
-@SequenceGenerator(name="ANIMAL_SEQ", initialValue = 6)
 public class AnimalDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ANIMAL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ANIMAL_GENERATOR")
+    @SequenceGenerator(name = "ANIMAL_GENERATOR", sequenceName = "ANIMAL_SEQ", allocationSize = 1)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 10)
     private String name;
 
     private String breed;

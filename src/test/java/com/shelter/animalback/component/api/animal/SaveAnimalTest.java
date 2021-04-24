@@ -42,7 +42,7 @@ public class SaveAnimalTest {
     @SneakyThrows
     public void createAnimalSuccessful() {
         var animal = new CreateAnimalRequestBody();
-        animal.setName("Hela");
+        animal.setName("ThisIsMyLongName");
         animal.setBreed("Mestizo");
         animal.setGender("Female");
         animal.setVaccinated(true);
@@ -60,7 +60,7 @@ public class SaveAnimalTest {
                 new ObjectMapper().readValue(response.getContentAsString(), CreateAnimalResponse.class);
 
         // Asserts Http Response
-        assertThat(animalResponse.getName(), equalTo("Hela"));
+        assertThat(animalResponse.getName(), equalTo("ThisIsMyLongName"));
         assertThat(animalResponse.getBreed(), equalTo("Mestizo"));
         assertThat(animalResponse.getGender(), equalTo("Female"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
@@ -71,7 +71,7 @@ public class SaveAnimalTest {
         assertThat(dbQuery.isPresent(), is(true));
 
         var animalDB = dbQuery.get();
-        assertThat(animalDB.getName(), equalTo("Hela"));
+        assertThat(animalDB.getName(), equalTo("ThisIsMyLongName"));
         assertThat(animalDB.getBreed(), equalTo("Mestizo"));
         assertThat(animalDB.getGender(), equalTo("Female"));
         assertThat(animalDB.isVaccinated(), equalTo(true));
