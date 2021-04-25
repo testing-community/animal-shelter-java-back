@@ -2,12 +2,15 @@ DROP TABLE IF EXISTS vaccines_by_animal;
 DROP TABLE IF EXISTS animal;
 DROP TABLE IF EXISTS vaccine;
 
+CREATE SEQUENCE IF NOT EXISTS ANIMAL_SEQ START 2;
+CREATE SEQUENCE IF NOT EXISTS VACCINE_SEQ START 1;
+
 CREATE TABLE IF NOT EXISTS animal
 (
     id bigint PRIMARY KEY,
     breed VARCHAR(255),
     gender VARCHAR(255),
-    name VARCHAR(255),
+    name VARCHAR(10),
     vaccinated boolean NOT NULL,
     UNIQUE(name)
 );

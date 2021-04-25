@@ -84,9 +84,13 @@ public class AnimalServiceImp implements AnimalService {
     }
 
     private Animal map(AnimalDao dao) {
-        var vaccines = dao.getVaccines().stream().map(vaccineDao -> vaccineDao.getName()).toArray(size -> new String[size]);
+        var vaccinesDao = dao.getVaccines();
+
+        var vaccines = vaccinesDao == null ? new String[0] :
+                vaccinesDao.stream().map(vaccineDao -> vaccineDao.getName()).toArray(size -> new String[size]);
 
         return new Animal(
+                dao.getId(),
                 dao.getName(),
                 dao.getBreed(),
                 dao.getGender(),
