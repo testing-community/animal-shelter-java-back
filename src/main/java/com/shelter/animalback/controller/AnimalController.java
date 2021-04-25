@@ -1,5 +1,8 @@
 package com.shelter.animalback.controller;
 
+import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
+import com.shelter.animalback.controller.dto.AnimalDto;
+import com.shelter.animalback.controller.dto.UpdateAnimalBodyDto;
 import com.shelter.animalback.domain.Animal;
 import com.shelter.animalback.exceptions.AnimalNotFoundException;
 import com.shelter.animalback.exceptions.DataConflictException;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RestController
 public class AnimalController {
@@ -17,14 +21,19 @@ public class AnimalController {
     private AnimalService animalService;
 
     @GetMapping("/animals")
-    public Collection<Animal> listAnimals() {
-        return animalService.getAll();
+    public ResponseEntity<Collection<AnimalDto>> listAnimals() {
+        var animals = animalService.getAll();
+        var dtos = animals.stream().map(animal -> map(animal)).collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
     @GetMapping("/animals/{name}")
-    public ResponseEntity getAnimal(@PathVariable("name") String name) {
+    public ResponseEntity<?> getAnimal(@PathVariable("name") String name) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(animalService.get(name));
+            var animal = animalService.get(name);
+
+            return ResponseEntity.status(HttpStatus.OK).body(map(animal));
         } catch (AnimalNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The animal called %s does not exists", name));
         }
@@ -38,14 +47,13 @@ public class AnimalController {
         } catch (AnimalNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The animal called %s does not exists", name));
         }
-
     }
 
     @PostMapping("/animals")
-    public ResponseEntity saveAnimal(@RequestBody Animal animalDto) {
+    public ResponseEntity<?> saveAnimal(@RequestBody CreateAnimalBodyDto animalDto) {
         try {
-            var animal = animalService.save(animalDto);
-            return new ResponseEntity<Animal>(animal, HttpStatus.CREATED);
+            var animal = animalService.save(map(animalDto));
+            return new ResponseEntity<AnimalDto>(map(animal), HttpStatus.CREATED);
 
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("The animal called %s has already been created", animalDto.getName()));
@@ -53,14 +61,43 @@ public class AnimalController {
     }
 
     @PutMapping("/animals/{name}")
-    public ResponseEntity updateAnimal(@PathVariable("name") String name, @RequestBody Animal animalDto) {
+    public ResponseEntity updateAnimal(@PathVariable("name") String name, @RequestBody UpdateAnimalBodyDto animalDto) {
         try {
-            var updatedAnimal = animalService.replace(name, animalDto);
+            var updatedAnimal = animalService.replace(name, map(animalDto));
             return new ResponseEntity<Animal>(updatedAnimal, HttpStatus.OK);
         } catch (AnimalNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The animal does not exist");
         } catch (DataConflictException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("The name can not be modified");
         }
+    }
+
+    private AnimalDto map(Animal animal) {
+        return new AnimalDto(
+                animal.getId(),
+                animal.getName(),
+                animal.getBreed(),
+                animal.getGender(),
+                animal.isVaccinated(),
+                animal.getVaccines());
+    }
+
+    private Animal map(CreateAnimalBodyDto dto) {
+        return new Animal(
+                dto.getName(),
+                dto.getBreed(),
+                dto.getGender(),
+                dto.isVaccinated(),
+                dto.getVaccines());
+    }
+
+    private Animal map(UpdateAnimalBodyDto dto) {
+        return new Animal(
+                dto.getId(),
+                dto.getName(),
+                dto.getBreed(),
+                dto.getGender(),
+                dto.isVaccinated(),
+                dto.getVaccines());
     }
 }
