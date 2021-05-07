@@ -1,11 +1,12 @@
 package com.shelter.animalback.component.api.animal;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shelter.animalback.controller.dto.AnimalDto;
 import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
 import io.restassured.RestAssured;
-import lombok.SneakyThrows;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -18,17 +19,18 @@ public class SaveAnimalTest {
     public AnimalDto animalResponse;
 
     @Test
-    @SneakyThrows
-    public void createAnimalSuccessful() {
-        var animal = new CreateAnimalBodyDto();
+    public void createAnimalSuccessful() throws JsonProcessingException {
+        // Arrange - Instance animal with data for request body
+        CreateAnimalBodyDto animal = new CreateAnimalBodyDto();
         animal.setName("ThisIsMyLongName");
         animal.setBreed("Mestizo");
         animal.setGender("Female");
         animal.setVaccinated(true);
 
-        var createAnimalRequestBody = new ObjectMapper().writeValueAsString(animal);
+        String createAnimalRequestBody = new ObjectMapper().writeValueAsString(animal);
 
-        var response = RestAssured.given()
+        // Act - Make a POST request against the create animal endpoint
+        Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createAnimalRequestBody)
                 .when()
@@ -37,12 +39,14 @@ public class SaveAnimalTest {
 
         animalResponse = response.as(AnimalDto.class);
 
-        // Asserts Http Response
+        // Assert - validate response: verify Animal fields.
         assertThat(animalResponse.getName(), equalTo("ThisIsMyLongName"));
         assertThat(animalResponse.getBreed(), equalTo("Mestizo"));
         assertThat(animalResponse.getGender(), equalTo("Female"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
         assertThat(animalResponse.getId(), notNullValue());
+
+        // Assert - Verify db creation.
     }
 
     @AfterAll

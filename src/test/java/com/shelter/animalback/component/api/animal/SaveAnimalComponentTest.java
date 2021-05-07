@@ -1,18 +1,18 @@
 package com.shelter.animalback.component.api.animal;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shelter.animalback.controller.dto.AnimalDto;
 import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import lombok.SneakyThrows;
+import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -21,10 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = { "spring.config.additional-location=classpath:component-test.yml"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SaveAnimalComponentTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -35,30 +32,33 @@ public class SaveAnimalComponentTest {
     }
 
     @Test
-    @SneakyThrows
-    public void createAnimalSuccessful() {
-        var animal = new CreateAnimalBodyDto();
+    public void createAnimalSuccessful() throws JsonProcessingException {
+        // Arrange - Instance animal with data for request body
+        CreateAnimalBodyDto animal = new CreateAnimalBodyDto();
         animal.setName("ThisIsMyLongName");
         animal.setBreed("Mestizo");
         animal.setGender("Female");
         animal.setVaccinated(true);
 
-        var createAnimalRequestBody = new ObjectMapper().writeValueAsString(animal);
+        String createAnimalRequestBody = new ObjectMapper().writeValueAsString(animal);
 
-        var response = RestAssuredMockMvc.given()
+        // Act - Make a POST request against the create animal endpoint
+        MockMvcResponse response = RestAssuredMockMvc.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(createAnimalRequestBody)
                 .when()
                 .post("/animals")
                 .thenReturn();
 
-        var animalResponse = response.as(AnimalDto.class);
+        AnimalDto animalResponse = response.as(AnimalDto.class);
 
-        // Asserts Http Response
+        // Assert - validate response: verify Animal fields
         assertThat(animalResponse.getName(), equalTo("ThisIsMyLongName"));
         assertThat(animalResponse.getBreed(), equalTo("Mestizo"));
         assertThat(animalResponse.getGender(), equalTo("Female"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
         assertThat(animalResponse.getId(), notNullValue());
+
+        // Assert - Verify db creation.
     }
 }
