@@ -30,6 +30,10 @@ dependencies {
 	testCompile 'org.testcontainers:testcontainers:1.15.2'
 	testCompile "org.testcontainers:junit-jupiter:1.15.2"
 	testImplementation 'org.testcontainers:postgresql:1.15.2'
+
+	testCompile 'io.rest-assured:rest-assured:4.3.0'
+	testCompile 'io.rest-assured:spring-mock-mvc:4.3.0'
+	testCompile 'io.rest-assured:rest-assured-common:4.3.0'
 }
 
 test {
