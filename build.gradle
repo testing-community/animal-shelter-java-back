@@ -25,15 +25,12 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'com.h2database:h2:1.4.200'
-	testImplementation 'org.everit.json:org.everit.json.schema:1.0.0'
 
-	testCompile 'org.testcontainers:testcontainers:1.15.2'
-	testCompile "org.testcontainers:junit-jupiter:1.15.2"
-	testImplementation 'org.testcontainers:postgresql:1.15.2'
+	testImplementation 'io.rest-assured:rest-assured:4.2.0'
+	testImplementation 'io.rest-assured:xml-path:4.2.0' // fix 'dependencyManagement.dependencies.dependency.systemPath' for com.sun:tools:jar must specify an absolute path but is ${tools.jar} in com.sun.xml.bind:jaxb-impl:2.2.11
+	testImplementation 'io.rest-assured:json-path:4.2.0' // java.lang.NoClassDefFoundError: io/restassured/path/json/mapper/factory/GsonObjectMapperFactory
 
-	testCompile 'io.rest-assured:rest-assured:4.3.0'
-	testCompile 'io.rest-assured:spring-mock-mvc:4.3.0'
-	testCompile 'io.rest-assured:rest-assured-common:4.3.0'
+	testCompile 'io.rest-assured:spring-mock-mvc:4.2.0'
 }
 
 test {

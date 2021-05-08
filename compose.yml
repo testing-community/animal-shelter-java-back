@@ -2,9 +2,11 @@ version: '3'
 
 services:
   teste-postgres-compose:
-    image: postgres
+    image: postgres:13.2
     environment:
+      POSTGRES_USER: user
       POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: pets
     ports:
       - "15432:5432"
     # volumes:
@@ -15,8 +17,8 @@ services:
   teste-pgadmin-compose:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: "test@domain.com"
-      PGADMIN_DEFAULT_PASSWORD: "defaultPassword"
+      PGADMIN_DEFAULT_EMAIL: "user@mail.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
     ports:
       - "8081:80"
     depends_on:

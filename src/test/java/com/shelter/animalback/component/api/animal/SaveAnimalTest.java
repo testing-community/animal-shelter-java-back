@@ -8,6 +8,7 @@ import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -22,7 +23,7 @@ public class SaveAnimalTest {
     public void createAnimalSuccessful() throws JsonProcessingException {
         // Arrange - Instance animal with data for request body
         CreateAnimalBodyDto animal = new CreateAnimalBodyDto();
-        animal.setName("ThisIsMyLongName");
+        animal.setName("Hela");
         animal.setBreed("Mestizo");
         animal.setGender("Female");
         animal.setVaccinated(true);
@@ -37,20 +38,16 @@ public class SaveAnimalTest {
                 .post("http://localhost:8080/animals")
                 .thenReturn();
 
+        var result = response.asString();
         animalResponse = response.as(AnimalDto.class);
 
         // Assert - validate response: verify Animal fields.
-        assertThat(animalResponse.getName(), equalTo("ThisIsMyLongName"));
+        assertThat(animalResponse.getName(), equalTo("Hela"));
         assertThat(animalResponse.getBreed(), equalTo("Mestizo"));
         assertThat(animalResponse.getGender(), equalTo("Female"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
         assertThat(animalResponse.getId(), notNullValue());
 
         // Assert - Verify db creation.
-    }
-
-    @AfterAll
-    public void tearDown() {
-        RestAssured.delete(String.format("http://localhost:8080/animals/%s", animalResponse.getId()));
     }
 }

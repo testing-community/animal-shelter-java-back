@@ -7,7 +7,7 @@ import com.shelter.animalback.controller.dto.AnimalDto;
 import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SaveAnimalComponentTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     }
@@ -35,7 +35,7 @@ public class SaveAnimalComponentTest {
     public void createAnimalSuccessful() throws JsonProcessingException {
         // Arrange - Instance animal with data for request body
         CreateAnimalBodyDto animal = new CreateAnimalBodyDto();
-        animal.setName("ThisIsMyLongName");
+        animal.setName("Hela");
         animal.setBreed("Mestizo");
         animal.setGender("Female");
         animal.setVaccinated(true);
@@ -53,7 +53,7 @@ public class SaveAnimalComponentTest {
         AnimalDto animalResponse = response.as(AnimalDto.class);
 
         // Assert - validate response: verify Animal fields
-        assertThat(animalResponse.getName(), equalTo("ThisIsMyLongName"));
+        assertThat(animalResponse.getName(), equalTo("Hela"));
         assertThat(animalResponse.getBreed(), equalTo("Mestizo"));
         assertThat(animalResponse.getGender(), equalTo("Female"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
