@@ -16,7 +16,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.16'
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
-
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -24,12 +23,10 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'com.h2database:h2:1.4.200'
 
 	testImplementation 'io.rest-assured:rest-assured:4.2.0'
 	testImplementation 'io.rest-assured:xml-path:4.2.0' // fix 'dependencyManagement.dependencies.dependency.systemPath' for com.sun:tools:jar must specify an absolute path but is ${tools.jar} in com.sun.xml.bind:jaxb-impl:2.2.11
 	testImplementation 'io.rest-assured:json-path:4.2.0' // java.lang.NoClassDefFoundError: io/restassured/path/json/mapper/factory/GsonObjectMapperFactory
-
 	testCompile 'io.rest-assured:spring-mock-mvc:4.2.0'
 }
 
