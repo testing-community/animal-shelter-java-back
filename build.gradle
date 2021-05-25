@@ -27,6 +27,8 @@ dependencies {
 	testImplementation 'io.rest-assured:rest-assured:4.2.0'
 	testImplementation 'io.rest-assured:xml-path:4.2.0' // fix 'dependencyManagement.dependencies.dependency.systemPath' for com.sun:tools:jar must specify an absolute path but is ${tools.jar} in com.sun.xml.bind:jaxb-impl:2.2.11
 	testImplementation 'io.rest-assured:json-path:4.2.0' // java.lang.NoClassDefFoundError: io/restassured/path/json/mapper/factory/GsonObjectMapperFactory
+
+	testCompile 'io.rest-assured:spring-mock-mvc:4.2.0'
 }
 
 test {
