@@ -1,5 +1,6 @@
 package com.shelter.animalback.service;
 
+import com.shelter.animalback.config.IntegrationConfig;
 import com.shelter.animalback.domain.Animal;
 import com.shelter.animalback.exceptions.AnimalNotFoundException;
 import com.shelter.animalback.exceptions.DataConflictException;
@@ -19,6 +20,9 @@ public class AnimalServiceImp implements AnimalService {
     @Autowired
     private AnimalRepository repository;
 
+    @Autowired
+    private IntegrationConfig.AIIntegration aiIntegration;
+
     @Override
     public List<Animal> getAll() {
         var animalsDao = repository.findAll();
@@ -36,7 +40,9 @@ public class AnimalServiceImp implements AnimalService {
             throw new AnimalNotFoundException(name);
         }
 
-        return map(animalDao);
+        Animal animal = map(animalDao);
+        animal.setLifeExpectancy(aiIntegration.getLifeExpectancy());
+        return animal;
     }
 
     @Override

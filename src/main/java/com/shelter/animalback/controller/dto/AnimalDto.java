@@ -14,6 +14,7 @@ public class AnimalDto {
     private String gender;
     private boolean isVaccinated;
     private String[] vaccines;
+    private int lifeExpectancy;
 
     public AnimalDto(long id, String name, String breed, String gender, boolean isVaccinated, String[] vaccines) {
         this.id = id;

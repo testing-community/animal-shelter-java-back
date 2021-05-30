@@ -33,7 +33,9 @@ public class AnimalController {
         try {
             var animal = animalService.get(name);
 
-            return ResponseEntity.status(HttpStatus.OK).body(map(animal));
+            AnimalDto animalDto = map(animal);
+            animalDto.setLifeExpectancy(animal.getLifeExpectancy());
+            return ResponseEntity.status(HttpStatus.OK).body(animalDto);
         } catch (AnimalNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The animal called %s does not exists", name));
         }
