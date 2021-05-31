@@ -21,7 +21,7 @@ public class AnimalServiceImp implements AnimalService {
     private AnimalRepository repository;
 
     @Autowired
-    private IntegrationConfig.AIIntegration aiIntegration;
+    private IntegrationConfig.FancyAIIntegration aiIntegration;
 
     @Override
     public List<Animal> getAll() {

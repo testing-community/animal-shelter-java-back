@@ -5,6 +5,7 @@ import com.shelter.animalback.model.AnimalDao;
 import com.shelter.animalback.repository.AnimalRepository;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,24 +24,29 @@ public class GetAnimalComponentTest {
     @Autowired
     private AnimalRepository animalRepository;
 
+    private AnimalDao animal;
+
     @BeforeEach
     public void setUp() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
-        AnimalDao animal = new AnimalDao("Chepe", "French Bulldog", "Male", true);
+        animal = new AnimalDao("Chepe", "French Bulldog", "Male", true);
         animalRepository.save(animal);
     }
 
     @Test
     public void testGetAnimalSuccessfully() {
-        // Act - Make a POST request against the create animal endpoint
         MockMvcResponse response = RestAssuredMockMvc.get("/animals/Chepe").thenReturn();
-
         AnimalDto animalResponse = response.as(AnimalDto.class);
 
-        // Assert - validate response: verify Animal fields
         assertThat(animalResponse.getName(), equalTo("Chepe"));
         assertThat(animalResponse.getBreed(), equalTo("French Bulldog"));
         assertThat(animalResponse.getGender(), equalTo("Male"));
         assertThat(animalResponse.isVaccinated(), equalTo(true));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
+        animalRepository.delete(animal);
     }
 }
