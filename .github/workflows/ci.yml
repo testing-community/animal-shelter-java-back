@@ -1,0 +1,16 @@
+name: Continous Integration
+
+on: push
+jobs:
+  ci:
+    run-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      - name: Set up Java 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt' # See 'Supported distributions' for available options
+          java-version: '11'
+      - name: Build with Gradle wrapper
+        run: ./gradlew build
