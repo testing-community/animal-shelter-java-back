@@ -63,7 +63,7 @@ public class GetAnimalComponentTest {
         AnimalDto animalResponse = response.as(AnimalDto.class);
 
         // Assert: validate response - mocked value should be returned
-        assertThat(animalResponse.getLifeExpectancy(), is(10));
+        assertThat(animalResponse.getLifeExpectancy(), is(11));
     }
 
     @AfterEach
