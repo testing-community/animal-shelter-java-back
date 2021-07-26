@@ -30,7 +30,8 @@ dependencies {
 	testImplementation 'io.rest-assured:json-path:4.2.0' // java.lang.NoClassDefFoundError: io/restassured/path/json/mapper/factory/GsonObjectMapperFactory
 
 	testCompile 'io.rest-assured:spring-mock-mvc:4.2.0'
-	testImplementation 'com.h2database:h2:1.4.200'
+	testImplementation 'org.testcontainers:testcontainers:1.15.3'
+	testImplementation 'org.testcontainers:postgresql:1.15.3'
 }
 
 test {
