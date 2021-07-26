@@ -33,16 +33,9 @@ public class GetAnimalComponentTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    private AnimalRepository animalRepository;
-
-    private AnimalDao animal;
-
     @BeforeEach
     public void setUp() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
-        animal = new AnimalDao("Chepe", "French Bulldog", "Male", true);
-        animalRepository.save(animal);
     }
 
     @Test
@@ -72,6 +65,5 @@ public class GetAnimalComponentTest {
     @AfterEach
     public void tearDown() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
-        animalRepository.delete(animal);
     }
 }

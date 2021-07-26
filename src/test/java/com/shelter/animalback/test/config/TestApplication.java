@@ -23,7 +23,7 @@ public class TestApplication {
     @Autowired
     public void configureSchema(DataSource dataSource) {
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-        resourceDatabasePopulator.addScript(new ClassPathResource("schema-postgresql.sql"));
+        resourceDatabasePopulator.addScript(new ClassPathResource("test-data.sql"));
 
         DatabasePopulatorUtils.execute(resourceDatabasePopulator, dataSource);
     }

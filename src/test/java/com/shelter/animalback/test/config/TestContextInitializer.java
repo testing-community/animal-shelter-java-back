@@ -10,7 +10,8 @@ public class TestContextInitializer implements ApplicationContextInitializer<Con
         var postgres = new PostgreSQLContainer("postgres:13.2")
                 .withDatabaseName("test-db")
                 .withUsername("test")
-                .withPassword("test");
+                .withPassword("test")
+                .withInitScript("schema-postgresql.sql");
 
         postgres.start();
         TestPropertyValues.of(
