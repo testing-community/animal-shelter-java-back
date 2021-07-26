@@ -32,10 +32,7 @@ public class AnimalController {
     public ResponseEntity<?> getAnimal(@PathVariable("name") String name) {
         try {
             var animal = animalService.get(name);
-
-            AnimalDto animalDto = map(animal);
-            animalDto.setLifeExpectancy(animal.getLifeExpectancy());
-            return ResponseEntity.status(HttpStatus.OK).body(animalDto);
+            return ResponseEntity.status(HttpStatus.OK).body(map(animal));
         } catch (AnimalNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("The animal called %s does not exists", name));
         }
@@ -53,6 +50,17 @@ public class AnimalController {
 
     @PostMapping("/animals")
     public ResponseEntity<?> saveAnimal(@RequestBody CreateAnimalBodyDto animalDto) {
+        try {
+            var animal = animalService.save(map(animalDto));
+            return new ResponseEntity<AnimalDto>(map(animal), HttpStatus.CREATED);
+
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("The animal called %s has already been created", animalDto.getName()));
+        }
+    }
+
+    @PostMapping("/animals/message")
+    public ResponseEntity<?> saveAnimalMessage(@RequestBody CreateAnimalBodyDto animalDto) {
         try {
             var animal = animalService.save(map(animalDto));
             return new ResponseEntity<AnimalDto>(map(animal), HttpStatus.CREATED);
@@ -84,7 +92,7 @@ public class AnimalController {
                 animal.getVaccines());
     }
 
-    private Animal map(CreateAnimalBodyDto dto) {
+    public static Animal map(CreateAnimalBodyDto dto) {
         return new Animal(
                 dto.getName(),
                 dto.getBreed(),

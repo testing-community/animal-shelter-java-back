@@ -1,6 +1,5 @@
 package com.shelter.animalback.service;
 
-import com.shelter.animalback.config.IntegrationConfig;
 import com.shelter.animalback.domain.Animal;
 import com.shelter.animalback.exceptions.AnimalNotFoundException;
 import com.shelter.animalback.exceptions.DataConflictException;
@@ -8,6 +7,8 @@ import com.shelter.animalback.model.AnimalDao;
 import com.shelter.animalback.repository.AnimalRepository;
 import com.shelter.animalback.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,8 +21,11 @@ public class AnimalServiceImp implements AnimalService {
     @Autowired
     private AnimalRepository repository;
 
+    @Value(value = "${spring.kafka.topic}")
+    private String topic;
+
     @Autowired
-    private IntegrationConfig.FancyAIIntegration aiIntegration;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public List<Animal> getAll() {
@@ -41,7 +45,6 @@ public class AnimalServiceImp implements AnimalService {
         }
 
         Animal animal = map(animalDao);
-        animal.setLifeExpectancy(aiIntegration.getLifeExpectancy());
         return animal;
     }
 
@@ -51,6 +54,7 @@ public class AnimalServiceImp implements AnimalService {
 
         var saved = repository.save(dao);
 
+        kafkaTemplate.send(topic, "New pet: " + animal.getName());
         return map(saved);
     }
 

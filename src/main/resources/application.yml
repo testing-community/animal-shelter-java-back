@@ -17,3 +17,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+
+  kafka:
+    topic: pets
+    bootstrap-servers: ${KAFKA_HOST}

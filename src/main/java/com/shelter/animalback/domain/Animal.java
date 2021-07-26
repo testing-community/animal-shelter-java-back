@@ -12,7 +12,6 @@ public class Animal {
     private boolean isVaccinated;
     private String[] vaccines;
     private long id;
-    private int lifeExpectancy;
 
     public Animal(long id, String name, String breed, String gender, boolean isVaccinated, String[] vaccines) {
         this(name, breed, gender, isVaccinated, vaccines);
