@@ -1,11 +1,13 @@
 package com.shelter.animalback.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shelter.animalback.domain.Animal;
 import com.shelter.animalback.exceptions.AnimalNotFoundException;
 import com.shelter.animalback.exceptions.DataConflictException;
 import com.shelter.animalback.model.AnimalDao;
 import com.shelter.animalback.repository.AnimalRepository;
 import com.shelter.animalback.service.interfaces.AnimalService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,12 +18,13 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
+@Slf4j
 public class AnimalServiceImp implements AnimalService {
 
     @Autowired
     private AnimalRepository repository;
 
-    @Value(value = "${spring.kafka.topic}")
+    @Value(value = "${spring.kafka.topic.publish}")
     private String topic;
 
     @Autowired
@@ -54,7 +57,8 @@ public class AnimalServiceImp implements AnimalService {
 
         var saved = repository.save(dao);
 
-        kafkaTemplate.send(topic, "New pet: " + animal.getName());
+        log.info("Sending animal ".concat(animal.getName()).concat(" to kafka topic ").concat(topic));
+        kafkaTemplate.send(topic, animal.getName());
         return map(saved);
     }
 

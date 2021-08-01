@@ -19,5 +19,7 @@ spring:
             non_contextual_creation: true
 
   kafka:
-    topic: pets
+    topic:
+      publish: process-saved-pets
+      listen: process-new-pets
     bootstrap-servers: ${KAFKA_HOST}

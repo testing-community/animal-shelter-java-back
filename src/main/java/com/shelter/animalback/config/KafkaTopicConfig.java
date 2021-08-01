@@ -8,11 +8,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value(value = "${spring.kafka.topic}")
-    private String topic;
+    @Value(value = "${spring.kafka.topic.publish}")
+    private String publishTopic;
+
+    @Value(value = "${spring.kafka.topic.listen}")
+    private String listenTopic;
 
     @Bean
-    public NewTopic topic() {
-        return new NewTopic(topic, 1, (short) 1);
+    public NewTopic publishTopic() {
+        return new NewTopic(publishTopic, 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic listenerTopic() {
+        return new NewTopic(listenTopic, 1, (short) 1);
     }
 }
