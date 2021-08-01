@@ -18,4 +18,12 @@ import javax.sql.DataSource;
 public class TestApplication {
     @MockBean
     private IntegrationConfig.FancyAIIntegration fancyAIIntegration;
+
+    @Autowired
+    public void executeScripts(DataSource dataSource) {
+        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+        resourceDatabasePopulator.addScript(new ClassPathResource("test-data.sql"));
+
+        DatabasePopulatorUtils.execute(resourceDatabasePopulator, dataSource);
+    }
 }

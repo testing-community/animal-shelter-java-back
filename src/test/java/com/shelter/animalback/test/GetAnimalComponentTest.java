@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -41,8 +40,6 @@ public class GetAnimalComponentTest {
     @BeforeEach
     public void setUp() {
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
-        animal = new AnimalDao("Chepe", "French Bulldog", "Male", true);
-        animalRepository.save(animal);
     }
 
     @Test
@@ -66,12 +63,6 @@ public class GetAnimalComponentTest {
         AnimalDto animalResponse = response.as(AnimalDto.class);
 
         // Assert: validate response - mocked value should be returned
-        assertThat(animalResponse.getLifeExpectancy(), is(11));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
-        animalRepository.delete(animal);
+        assertThat(animalResponse.getLifeExpectancy(), is(10));
     }
 }

@@ -4,6 +4,3 @@ spring:
     username: none
     password: none
     driverClassName: none
-
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
