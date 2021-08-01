@@ -20,7 +20,7 @@ public class PetsListener {
     @Autowired private AnimalService animalService;
 
     @KafkaListener(topics = "${spring.kafka.topic.listen}", groupId = "pets")
-    public void receive(@Payload String message) throws JsonProcessingException {
+    public void receive(@Payload String message) {
         try {
             log.info("Received pet: ".concat(message));
             var mapper = new ObjectMapper();

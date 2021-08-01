@@ -10,6 +10,7 @@ import com.shelter.animalback.service.interfaces.AnimalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.KafkaException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -54,17 +55,8 @@ public class AnimalController {
             var animal = animalService.save(map(animalDto));
             return new ResponseEntity<AnimalDto>(map(animal), HttpStatus.CREATED);
 
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("The animal called %s has already been created", animalDto.getName()));
-        }
-    }
-
-    @PostMapping("/animals/message")
-    public ResponseEntity<?> saveAnimalMessage(@RequestBody CreateAnimalBodyDto animalDto) {
-        try {
-            var animal = animalService.save(map(animalDto));
-            return new ResponseEntity<AnimalDto>(map(animal), HttpStatus.CREATED);
-
+        } catch (KafkaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("The animal called %s has already been created", animalDto.getName()));
         }
