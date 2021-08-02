@@ -4,6 +4,8 @@ import com.shelter.animalback.controller.dto.AnimalDto;
 import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
 import com.shelter.animalback.model.AnimalDao;
 import com.shelter.animalback.repository.AnimalRepository;
+import com.shelter.animalback.test.config.TestApplication;
+import com.shelter.animalback.test.config.TestContextInitializer;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Optional;
@@ -19,7 +22,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestApplication.class)
+@ContextConfiguration(initializers = TestContextInitializer.class)
 public class SaveAnimalComponentTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
