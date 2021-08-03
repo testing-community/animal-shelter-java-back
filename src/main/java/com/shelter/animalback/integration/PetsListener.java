@@ -1,10 +1,7 @@
 package com.shelter.animalback.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shelter.animalback.controller.dto.AnimalDto;
 import com.shelter.animalback.controller.dto.CreateAnimalBodyDto;
-import com.shelter.animalback.domain.Animal;
 import com.shelter.animalback.service.interfaces.AnimalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,3 +4,8 @@ spring:
     username: none
     password: none
     driverClassName: none
+
+  kafka:
+    topic:
+      listen: test
+      publish: test
